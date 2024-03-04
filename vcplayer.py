@@ -23,7 +23,7 @@ if vc_session:
         StringSession(vc_session), Config.APP_ID, Config.API_HASH
     )
 else:
-    vc_client = lucmd9
+    vc_client = Qrh9
 
 vc_client.__class__.__module__ = "telethon.client.telegramclient"
 vc_player = music(vc_client)
@@ -57,9 +57,9 @@ ALLOWED_USERS = set()
         ],
         "examples": [
             "{tr}joinvc",
-            "{tr}joinvc --1002142722941",
-            "{tr}joinvc -as --1002142722941",
-            "{tr}joinvc --1002142722941 -as --1002142722941",
+            "{tr}joinvc -1002142722941",
+            "{tr}joinvc -as -1002142722941",
+            "{tr}joinvc -1002142722941 -as -1002142722941",
         ],
     },
 )
@@ -99,6 +99,7 @@ async def joinVoicechat(event):
 
     out = await vc_player.join_vc(vc_chat, joinas)
     await edit_delete(event, out)
+
 
 @lucmd9.ar_cmd(
     pattern="غادر",
@@ -152,7 +153,7 @@ async def get_playlist(event):
                 jep += f"{num}. 🔉  `{item['title']}`\n"
             else:
                 jep += f"{num}. 📺  `{item['title']}`\n"
-        await edit_delete(event, f"**قائمة التشغيل:**\n\n{jep}\n**الخفاش يتمنى لكم وقتاً ممتعاً**")
+        await edit_delete(event, f"**قائمة التشغيل:**\n\n{jep}\n**الساحر يتمنى لكم وقتاً ممتعاً**")
 
 def convert_youtube_link_to_name(link):
     with youtube_dl.YoutubeDL({}) as ydl:
@@ -202,7 +203,7 @@ async def play_audio(event):
         resp = await vc_player.play_song(input_str, Stream.audio, force=False)
     if resp:
         await edit_delete(event, resp, time=30)
-        
+
 @lucmd9.ar_cmd(
     pattern="ايقاف_مؤقت",
     command=("ايقاف_مؤقت", plugin_category),
