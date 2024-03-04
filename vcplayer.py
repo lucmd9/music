@@ -3,7 +3,7 @@ import logging
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.types import User
-from SHRU import Config, Qrh9
+from BATT import Config, lucmd9
 from SHRU.core.managers import edit_delete, edit_or_reply
 
 from .helper.stream_helper import Stream
@@ -14,7 +14,7 @@ plugin_category = "extra"
 
 logging.getLogger("pytgcalls").setLevel(logging.ERROR)
 
-OWNER_ID = Qrh9.uid
+OWNER_ID = lucmd9.uid
 
 vc_session = Config.VC_SESSION
 
@@ -39,7 +39,7 @@ async def handler(_, update):
 ALLOWED_USERS = set()
 
 
-@Qrh9.ar_cmd(
+@lucmd9.ar_cmd(
     pattern="انضمام ?(\S+)? ?(?:-as)? ?(\S+)?",
     command=("انضمام", plugin_category),
     info={
@@ -82,7 +82,7 @@ async def joinVoicechat(event):
         )
 
     try:
-        vc_chat = await Qrh9.get_entity(chat)
+        vc_chat = await lucmd9.get_entity(chat)
     except Exception as e:
         return await edit_delete(event, f'ERROR : \n{e or "UNKNOWN CHAT"}')
 
@@ -99,6 +99,150 @@ async def joinVoicechat(event):
 
     out = await vc_player.join_vc(vc_chat, joinas)
     await edit_delete(event, out)
+
+@lucmd9.ar_cmd(
+    pattern="غادر",
+    command=("غادر", plugin_category),
+    info={
+        "header": "To leave a Voice Chat.",
+        "description": "To leave a Voice Chat",
+        "usage": [
+            "{tr}leavevc",
+        ],
+        "examples": [
+            "{tr}leavevc",
+        ],
+    },
+)
+async def leaveVoicechat(event):
+    "To leave a Voice Chat."
+    if vc_player.CHAT_ID:
+        await edit_or_reply(event, "** تدلل غادرت من الاتصال حبيبي ❤️ **")
+        chat_name = vc_player.CHAT_NAME
+        await vc_player.leave_vc()
+        await edit_delete(event, f"تمت المغادرة من {chat_name}")
+    else:
+        await edit_delete(event, "** انا لست منضم الى الاتصال عزيزي ❤️**")
+
+
+@lucmd9.ar_cmd(
+    pattern="قائمة_التشغيل",
+    command=("قائمة_التشغيل", plugin_category),
+    info={
+        "header": "To Get all playlist.",
+        "description": "To Get all playlist for Voice Chat.",
+        "usage": [
+            "{tr}playlist",
+        ],
+        "examples": [
+            "{tr}playlist",
+        ],
+    },
+)
+async def get_playlist(event):
+    "To Get all playlist for Voice Chat."
+    await edit_or_reply(event, "**جارِ جلب قائمة التشغيل ......**")
+    playl = vc_player.PLAYLIST
+    if not playl:
+        await edit_delete(event, "Playlist empty", time=10)
+    else:
+        jep = ""
+        for num, item in enumerate(playl, 1):
+            if item["stream"] == Stream.audio:
+                jep += f"{num}. 🔉  `{item['title']}`\n"
+            else:
+                jep += f"{num}. 📺  `{item['title']}`\n"
+        await edit_delete(event, f"**قائمة التشغيل:**\n\n{jep}\n**الخفاش يتمنى لكم وقتاً ممتعاً**")
+
+def convert_youtube_link_to_name(link):
+    with youtube_dl.YoutubeDL({}) as ydl:
+        info = ydl.extract_info(link, download=False)
+        title = info['title']
+    return title
+
+@lucmd9.ar_cmd(
+    pattern="تشغيل ?(-f)? ?([\S ]*)?",
+    command=("تشغيل", plugin_category),
+    info={
+        "header": "To Play a media as audio on VC.",
+        "description": "To play a audio stream on VC.",
+        "flags": {
+            "-f": "Force play the Audio",
+        },
+        "usage": [
+            "{tr}play (reply to message)",
+            "{tr}play (yt link)",
+            "{tr}play -f (yt link)",
+        ],
+        "examples": [
+            "{tr}play",
+            "{tr}play https://www.youtube.com/watch?v=c05GBLT_Ds0",
+            "{tr}play -f https://www.youtube.com/watch?v=c05GBLT_Ds0",
+        ],
+    },
+)
+async def play_audio(event):
+    "To Play a media as audio on VC."
+    flag = event.pattern_match.group(1)
+    input_str = event.pattern_match.group(2)
+    if input_str == "" and event.reply_to_msg_id:
+        input_str = await tg_dl(event)
+    if not input_str:
+        return await edit_delete(
+            event, "**قم بالرد على ملف صوتي او رابط يوتيوب**", time=20
+        )
+    if not vc_player.CHAT_ID:
+        return await edit_or_reply(event, "**`قم بلانضمام للمكالمة اولاً بأستخدام أمر `انضمام")
+    if not input_str:
+        return await edit_or_reply(event, "No Input to play in vc")
+    await edit_or_reply(event, "**يتم الان تشغيل الاغنية في الاتصال ❤️**")
+    if flag:
+        resp = await vc_player.play_song(input_str, Stream.audio, force=True)
+    else:
+        resp = await vc_player.play_song(input_str, Stream.audio, force=False)
+    if resp:
+        await edit_delete(event, resp, time=30)
+        
+@lucmd9.ar_cmd(
+    pattern="ايقاف_مؤقت",
+    command=("ايقاف_مؤقت", plugin_category),
+    info={
+        "header": "To Pause a stream on Voice Chat.",
+        "description": "To Pause a stream on Voice Chat",
+        "usage": [
+            "{tr}pause",
+        ],
+        "examples": [
+            "{tr}pause",
+        ],
+    },
+)
+async def pause_stream(event):
+    "To Pause a stream on Voice Chat."
+    await edit_or_reply(event, "**تم ايقاف الموسيقى مؤقتاً ⏸**")
+    res = await vc_player.pause()
+    await edit_delete(event, res, time=30)
+
+
+@lucmd9.ar_cmd(
+    pattern="استمرار",
+    command=("استمرار", plugin_category),
+    info={
+        "header": "To Resume a stream on Voice Chat.",
+        "description": "To Resume a stream on Voice Chat",
+        "usage": [
+            "{tr}resume",
+        ],
+        "examples": [
+            "{tr}resume",
+        ],
+    },
+)
+async def resume_stream(event):
+    "To Resume a stream on Voice Chat."
+    await edit_or_reply(event, "**تم استمرار الاغنيه استمتع ▶️**")
+    res = await vc_player.resume()
+    await edit_delete(event, res, time=30)
 
 
 @lucmd9.ar_cmd(
