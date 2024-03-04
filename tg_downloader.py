@@ -5,9 +5,9 @@ import pathlib
 import time
 from datetime import datetime
 
-from SHRU.Config import Config
-from SHRU.core.managers import edit_or_reply
-from SHRU.helpers import progress
+from BATT.Config import Config
+from BATT import edit_or_reply
+from BATT.helpers import progress
 from telethon.tl import types
 from telethon.utils import get_extension
 
