@@ -104,7 +104,7 @@ async def info_vc(event):
     if not gc_call:
         return
     await edit_or_reply(event, "**- جار جلب معلومات المكالمة انتظر قليلا**")
-    call_details = await Qrh9(
+    call_details = await lucmd9(
         functions.phone.GetGroupCallRequest(call=gc_call, limit=1)
     )
     grp_call = "**معلومات مكالمة المجموعة**\n\n"
