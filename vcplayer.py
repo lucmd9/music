@@ -4,7 +4,7 @@ from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.types import User
 from BATT import Config, lucmd9
-from SHRU.core.managers import edit_delete, edit_or_reply
+from BATT.core.managers import edit_delete, edit_or_reply
 
 from .helper.stream_helper import Stream
 from .helper.tg_downloader import tg_dl
@@ -57,9 +57,9 @@ ALLOWED_USERS = set()
         ],
         "examples": [
             "{tr}joinvc",
-            "{tr}joinvc -1005895485",
-            "{tr}joinvc -as -1005895485",
-            "{tr}joinvc -1005895485 -as -1005895485",
+            "{tr}joinvc --1002142722941",
+            "{tr}joinvc -as --1002142722941",
+            "{tr}joinvc --1002142722941 -as --1002142722941",
         ],
     },
 )
