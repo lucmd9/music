@@ -65,7 +65,7 @@ class music:
                 await self.client(
                     functions.phone.CreateGroupCallRequest(
                         peer=chat,
-                        title="الساحر ✨",
+                        title="الخفاش 🦇",
                     )
                 )
                 await self.join_vc(chat=chat, join_as=join_as)
