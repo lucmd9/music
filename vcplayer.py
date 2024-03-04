@@ -57,9 +57,9 @@ ALLOWED_USERS = set()
         ],
         "examples": [
             "{tr}joinvc",
-            "{tr}joinvc -1002142722941",
-            "{tr}joinvc -as -1002142722941",
-            "{tr}joinvc -1002142722941 -as -1002142722941",
+            "{tr}joinvc -1045489068",
+            "{tr}joinvc -as -1045489068",
+            "{tr}joinvc -1045489068 -as -1045489068",
         ],
     },
 )
