@@ -1,4 +1,4 @@
-from BATT import lucemd9 
+from BATT import lucmd9
 from BATT.core.managers import edit_delete, edit_or_reply
 from BATT.helpers.utils import mentionuser
 from telethon import functions
