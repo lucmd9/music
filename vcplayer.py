@@ -23,7 +23,7 @@ if vc_session:
         StringSession(vc_session), Config.APP_ID, Config.API_HASH
     )
 else:
-    vc_client = lucmdp
+    vc_client = lucmd9
 
 vc_client.__class__.__module__ = "telethon.client.telegramclient"
 vc_player = music(vc_client)
