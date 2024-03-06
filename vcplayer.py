@@ -3,7 +3,7 @@ import logging
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.types import User
-from BATT import Config, lucmd9
+from BAAT import Config, BATT
 from BATT.core.managers import edit_delete, edit_or_reply
 
 from .helper.stream_helper import Stream
@@ -57,9 +57,9 @@ ALLOWED_USERS = set()
         ],
         "examples": [
             "{tr}joinvc",
-            "{tr}joinvc -1045489068",
-            "{tr}joinvc -as -1045489068",
-            "{tr}joinvc -1045489068 -as -1045489068",
+            "{tr}joinvc -1005895485",
+            "{tr}joinvc -as -1005895485",
+            "{tr}joinvc -1005895485 -as -1005895485",
         ],
     },
 )
@@ -82,7 +82,7 @@ async def joinVoicechat(event):
         )
 
     try:
-        vc_chat = await lucmd9.get_entity(chat)
+        vc_chat = await Qrh9.get_entity(chat)
     except Exception as e:
         return await edit_delete(event, f'ERROR : \n{e or "UNKNOWN CHAT"}')
 
@@ -153,7 +153,7 @@ async def get_playlist(event):
                 jep += f"{num}. 🔉  `{item['title']}`\n"
             else:
                 jep += f"{num}. 📺  `{item['title']}`\n"
-        await edit_delete(event, f"**قائمة التشغيل:**\n\n{jep}\n**الساحر يتمنى لكم وقتاً ممتعاً**")
+        await edit_delete(event, f"**قائمة التشغيل:**\n\n{jep}\n**BAT SOURCE WISHES Happy time**")
 
 def convert_youtube_link_to_name(link):
     with youtube_dl.YoutubeDL({}) as ydl:
