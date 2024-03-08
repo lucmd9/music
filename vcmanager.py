@@ -29,7 +29,7 @@ async def chat_vc_checker(event, chat, edits=True):
 async def parse_entity(entity):
     if entity.isnumeric():
         entity = int(entity)
-    return await Qrh9.get_entity(entity)
+    return await lucmd9.get_entity(entity)
 
 
 @lucmd9.ar_cmd(pattern="تشغيل_المكالمة")
