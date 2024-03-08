@@ -39,7 +39,7 @@ async def handler(_, update):
 ALLOWED_USERS = set()
 
 
-@lucmd99.ar_cmd(
+@lucmd9.ar_cmd(
     pattern="انضمام ?(\S+)? ?(?:-as)? ?(\S+)?",
     command=("انضمام", plugin_category),
     info={
