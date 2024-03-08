@@ -3,8 +3,8 @@ import logging
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.types import User
-from BAAT import Config, BATT
-from BATT.core.managers import edit_delete, edit_or_reply
+from BATT import Config, lucmd9
+from SHRU.core.managers import edit_delete, edit_or_reply
 
 from .helper.stream_helper import Stream
 from .helper.tg_downloader import tg_dl
@@ -39,7 +39,7 @@ async def handler(_, update):
 ALLOWED_USERS = set()
 
 
-@lucmd9.ar_cmd(
+@lucmd99.ar_cmd(
     pattern="انضمام ?(\S+)? ?(?:-as)? ?(\S+)?",
     command=("انضمام", plugin_category),
     info={
@@ -82,7 +82,7 @@ async def joinVoicechat(event):
         )
 
     try:
-        vc_chat = await Qrh9.get_entity(chat)
+        vc_chat = await lucmd9.get_entity(chat)
     except Exception as e:
         return await edit_delete(event, f'ERROR : \n{e or "UNKNOWN CHAT"}')
 
@@ -153,7 +153,7 @@ async def get_playlist(event):
                 jep += f"{num}. 🔉  `{item['title']}`\n"
             else:
                 jep += f"{num}. 📺  `{item['title']}`\n"
-        await edit_delete(event, f"**قائمة التشغيل:**\n\n{jep}\n**BAT SOURCE WISHES Happy time**")
+        await edit_delete(event, f"**قائمة التشغيل:**\n\n{jep}\n**الخفاش يتمنى لكم وقتاً ممتعاً**")
 
 def convert_youtube_link_to_name(link):
     with youtube_dl.YoutubeDL({}) as ydl:
@@ -161,8 +161,7 @@ def convert_youtube_link_to_name(link):
         title = info['title']
     return title
 
-@lucmd9.ar_cmd(
-    pattern="تشغيل ?(-f)? ?([\S ]*)?",
+@lucmd9.attern="تشغيل ?(-f)? ?([\S ]*)?",
     command=("تشغيل", plugin_category),
     info={
         "header": "To Play a media as audio on VC.",
@@ -203,7 +202,7 @@ async def play_audio(event):
         resp = await vc_player.play_song(input_str, Stream.audio, force=False)
     if resp:
         await edit_delete(event, resp, time=30)
-
+        
 @lucmd9.ar_cmd(
     pattern="ايقاف_مؤقت",
     command=("ايقاف_مؤقت", plugin_category),
