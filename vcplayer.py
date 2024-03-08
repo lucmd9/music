@@ -3,8 +3,8 @@ import logging
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.types import User
-from SHRU import Config, Qrh9
-from SHRU.core.managers import edit_delete, edit_or_reply
+from BATT import Config, lucmd9
+from BATT.core.managers import edit_delete, edit_or_reply
 
 from .helper.stream_helper import Stream
 from .helper.tg_downloader import tg_dl
@@ -14,7 +14,7 @@ plugin_category = "extra"
 
 logging.getLogger("pytgcalls").setLevel(logging.ERROR)
 
-OWNER_ID = Qrh9.uid
+OWNER_ID = lucmd9.uid
 
 vc_session = Config.VC_SESSION
 
@@ -23,7 +23,7 @@ if vc_session:
         StringSession(vc_session), Config.APP_ID, Config.API_HASH
     )
 else:
-    vc_client = Qrh9
+    vc_client = lucmd9
 
 vc_client.__class__.__module__ = "telethon.client.telegramclient"
 vc_player = music(vc_client)
@@ -39,7 +39,7 @@ async def handler(_, update):
 ALLOWED_USERS = set()
 
 
-@Qrh9.ar_cmd(
+@lucmd9.ar_cmd(
     pattern="انضمام ?(\S+)? ?(?:-as)? ?(\S+)?",
     command=("انضمام", plugin_category),
     info={
@@ -82,7 +82,7 @@ async def joinVoicechat(event):
         )
 
     try:
-        vc_chat = await Qrh9.get_entity(chat)
+        vc_chat = await lucmd9.get_entity(chat)
     except Exception as e:
         return await edit_delete(event, f'ERROR : \n{e or "UNKNOWN CHAT"}')
 
@@ -101,7 +101,7 @@ async def joinVoicechat(event):
     await edit_delete(event, out)
 
 
-@Qrh9.ar_cmd(
+@lucmd9.ar_cmd(
     pattern="غادر",
     command=("غادر", plugin_category),
     info={
@@ -126,7 +126,7 @@ async def leaveVoicechat(event):
         await edit_delete(event, "** انا لست منضم الى الاتصال عزيزي ❤️**")
 
 
-@Qrh9.ar_cmd(
+@lucmd9.ar_cmd(
     pattern="قائمة_التشغيل",
     command=("قائمة_التشغيل", plugin_category),
     info={
@@ -161,7 +161,7 @@ def convert_youtube_link_to_name(link):
         title = info['title']
     return title
 
-@Qrh9.ar_cmd(
+@lucmd9.ar_cmd(
     pattern="تشغيل ?(-f)? ?([\S ]*)?",
     command=("تشغيل", plugin_category),
     info={
@@ -204,7 +204,7 @@ async def play_audio(event):
     if resp:
         await edit_delete(event, resp, time=30)
         
-@Qrh9.ar_cmd(
+@lucmd9.ar_cmd(
     pattern="ايقاف_مؤقت",
     command=("ايقاف_مؤقت", plugin_category),
     info={
@@ -225,7 +225,7 @@ async def pause_stream(event):
     await edit_delete(event, res, time=30)
 
 
-@Qrh9.ar_cmd(
+@lucmd9.ar_cmd(
     pattern="استمرار",
     command=("استمرار", plugin_category),
     info={
@@ -246,7 +246,7 @@ async def resume_stream(event):
     await edit_delete(event, res, time=30)
 
 
-@Qrh9.ar_cmd(
+@lucmd9.ar_cmd(
     pattern="تخطي",
     command=("تخطي", plugin_category),
     info={
