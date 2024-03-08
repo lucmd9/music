@@ -1,6 +1,6 @@
-from SHRU import Qrh9
-from SHRU.core.managers import edit_delete, edit_or_reply
-from SHRU.helpers.utils import mentionuser
+from BATT import lucmd9
+from BATT.core.managers import edit_delete, edit_or_reply
+from BATT.helpers.utils import mentionuser
 from telethon import functions
 from telethon.errors import ChatAdminRequiredError, UserAlreadyInvitedError
 from telethon.tl.types import Channel, Chat, User
@@ -8,9 +8,9 @@ from telethon.tl.types import Channel, Chat, User
 
 async def get_group_call(chat):
     if isinstance(chat, Channel):
-        result = await Qrh9(functions.channels.GetFullChannelRequest(channel=chat))
+        result = await lucmd9(functions.channels.GetFullChannelRequest(channel=chat))
     elif isinstance(chat, Chat):
-        result = await Qrh9(functions.messages.GetFullChatRequest(chat_id=chat.id))
+        result = await lucmd9(functions.messages.GetFullChatRequest(chat_id=chat.id))
     return result.full_chat.call
 
 
@@ -32,7 +32,7 @@ async def parse_entity(entity):
     return await Qrh9.get_entity(entity)
 
 
-@Qrh9.ar_cmd(pattern="تشغيل_المكالمة")
+@lucmd9.ar_cmd(pattern="تشغيل_المكالمة")
 async def start_vc(event):
     vc_chat = await Qrh9.get_entity(event.chat_id)
     gc_call = await chat_vc_checker(event, vc_chat, False)
@@ -44,7 +44,7 @@ async def start_vc(event):
         await Qrh9(
             functions.phone.CreateGroupCallRequest(
                 peer=vc_chat,
-                title="الساحر ✨",
+                title="الخفاش ✨",
             )
         )
         await edit_delete(event, "**- تم بنجاح تشغيل المكالمة الصوتية**")
@@ -52,14 +52,14 @@ async def start_vc(event):
         await edit_delete(event, "**- يجب ان تكون ادمن لتشغيل المكالمة هنا**", time=20)
 
 
-@Qrh9.ar_cmd(pattern="انهاء_المكالمة")
+@lucmd9.ar_cmd(pattern="انهاء_المكالمة")
 async def end_vc(event):
     vc_chat = await Qrh9.get_entity(event.chat_id)
     gc_call = await chat_vc_checker(event, vc_chat)
     if not gc_call:
         return
     try:
-        await Qrh9(functions.phone.DiscardGroupCallRequest(call=gc_call))
+        await lucmd9(functions.phone.DiscardGroupCallRequest(call=gc_call))
         await edit_delete(event, "**- تم بنجاح انهاء المكالمة الصوتية**")
     except ChatAdminRequiredError:
         await edit_delete(
@@ -67,11 +67,11 @@ async def end_vc(event):
         )
 
 
-@Qrh9.ar_cmd(pattern="دعوة ?(.*)?")
+@lucmd9.ar_cmd(pattern="دعوة ?(.*)?")
 async def inv_vc(event):
     users = event.pattern_match.group(1)
     reply = await event.get_reply_message()
-    vc_chat = await Qrh9.get_entity(event.chat_id)
+    vc_chat = await lucmd9.get_entity(event.chat_id)
     gc_call = await chat_vc_checker(event, vc_chat)
     if not gc_call:
         return
@@ -97,7 +97,7 @@ async def inv_vc(event):
         return await edit_delete(event, "- تم دعوة المستخدم بالاصل", time=20)
 
 
-@Qrh9.ar_cmd(pattern="معلومات_المكالمة")
+@lucmd9.ar_cmd(pattern="معلومات_المكالمة")
 async def info_vc(event):
     vc_chat = await Qrh9.get_entity(event.chat_id)
     gc_call = await chat_vc_checker(event, vc_chat)
@@ -119,7 +119,7 @@ async def info_vc(event):
     await edit_or_reply(event, grp_call)
 
 
-@Qrh9.ar_cmd(pattern="تسمية_المكالمة?(.*)?")
+@lucmd9.ar_cmd(pattern="تسمية_المكالمة?(.*)?")
 async def title_vc(event):
     title = event.pattern_match.group(1)
     vc_chat = await Qrh9.get_entity(event.chat_id)
@@ -128,5 +128,5 @@ async def title_vc(event):
         return
     if not title:
         return await edit_delete("**- يجب عليك كتابة العنوان مع الامر**")
-    await Qrh9(functions.phone.EditGroupCallTitleRequest(call=gc_call, title=title))
+    await lucmd9(functions.phone.EditGroupCallTitleRequest(call=gc_call, title=title))
     await edit_delete(event, f"- تم بنجاح تغيير اسم المكالمة الى **{title}**")
