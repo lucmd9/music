@@ -3,7 +3,8 @@ import logging
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.types import User
-from BATT import Config, lucmd9
+from BATT import Config
+from BATT import lucmd9
 from BATT.core.managers import edit_delete, edit_or_reply
 
 from .helper.stream_helper import Stream
