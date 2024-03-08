@@ -34,14 +34,14 @@ async def parse_entity(entity):
 
 @lucmd9.ar_cmd(pattern="تشغيل_المكالمة")
 async def start_vc(event):
-    vc_chat = await Qrh9.get_entity(event.chat_id)
+    vc_chat = await lucmd9.get_entity(event.chat_id)
     gc_call = await chat_vc_checker(event, vc_chat, False)
     if gc_call:
         return await edit_delete(
             event, "**- المكالمة الصوتية بالفعل مشغلة بهذه الدردشة**"
         )
     try:
-        await Qrh9(
+        await lucmd9(
             functions.phone.CreateGroupCallRequest(
                 peer=vc_chat,
                 title="الخفاش ✨",
@@ -89,7 +89,7 @@ async def inv_vc(event):
         if isinstance(cc, User):
             user_list.append(cc)
     try:
-        await Qrh9(
+        await lucmd9(
             functions.phone.InviteToGroupCallRequest(call=gc_call, users=user_list)
         )
         await edit_delete(event, "**- تم بنجاح دعوة المستخدمين**")
@@ -99,12 +99,12 @@ async def inv_vc(event):
 
 @lucmd9.ar_cmd(pattern="معلومات_المكالمة")
 async def info_vc(event):
-    vc_chat = await Qrh9.get_entity(event.chat_id)
+    vc_chat = await lucmd9.get_entity(event.chat_id)
     gc_call = await chat_vc_checker(event, vc_chat)
     if not gc_call:
         return
     await edit_or_reply(event, "**- جار جلب معلومات المكالمة انتظر قليلا**")
-    call_details = await Qrh9(
+    call_details = await lucmd9(
         functions.phone.GetGroupCallRequest(call=gc_call, limit=1)
     )
     grp_call = "**معلومات مكالمة المجموعة**\n\n"
@@ -122,7 +122,7 @@ async def info_vc(event):
 @lucmd9.ar_cmd(pattern="تسمية_المكالمة?(.*)?")
 async def title_vc(event):
     title = event.pattern_match.group(1)
-    vc_chat = await Qrh9.get_entity(event.chat_id)
+    vc_chat = await lucmd9.get_entity(event.chat_id)
     gc_call = await chat_vc_checker(event, vc_chat)
     if not gc_call:
         return
